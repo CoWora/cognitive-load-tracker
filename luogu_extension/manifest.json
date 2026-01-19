@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Luogu AOI Tracker",
+  "version": "1.0",
+  "description": "为认知负荷研究提供洛谷页面的AOI区域坐标和题目信息",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["*://*.luogu.com.cn/*", "*://www.luogu.com.cn/*", "http://127.0.0.1/*"],
+  "content_scripts": [
+    {
+      "matches": ["*://*.luogu.com.cn/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "48": "icon.png"
+  }
+}
+

@@ -6,9 +6,12 @@
 
 模型文件太大，无法通过 Git 上传。请手动下载：
 
-**L2CSNet_gaze360.pkl** (约 180MB)
+**L2CSNet_gaze360.pkl** (约 92MB)
 
-下载链接：[Google Drive](https://drive.google.com/file/d/1Fwv1xHPx6dBLtQS5Q6O7pXX_p0lSzJQl/view)
+下载链接：[Google Drive](https://drive.google.com/drive/folders/17p6ORr-JQJcw-eYtG2WGNiuS_qVKwdWd)
+
+1. 点击进入 **Gaze360** 文件夹
+2. 下载 `L2CSNet_gaze360.pkl`
 
 ## 文件结构
 

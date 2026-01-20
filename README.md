@@ -66,7 +66,11 @@ pip install git+https://github.com/Ahmednull/L2CS-Net.git
 
 ### 6. 下载模型权重
 
-从 [Google Drive](https://drive.google.com/file/d/1fR8pZPxTrMXQaLGwolJ_vZZMMW9wWdCp/view) 下载 `L2CSNet_gaze360.pkl`，放到 `models/` 目录。
+从 [Google Drive](https://drive.google.com/drive/folders/17p6ORr-JQJcw-eYtG2WGNiuS_qVKwdWd) 下载模型文件：
+
+1. 进入 **Gaze360** 文件夹
+2. 下载 `L2CSNet_gaze360.pkl`
+3. 放到 `models/` 目录
 
 ### 7. 安装浏览器插件
 

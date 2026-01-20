@@ -34,23 +34,41 @@ py -3.10 -m venv venv
 .\venv\Scripts\activate
 ```
 
-### 3. 安装依赖
+### 3. 安装 PyTorch
+
+**有 NVIDIA 显卡（推荐，帧率 10-15fps）：**
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+```
+
+**无显卡 / 仅 CPU（帧率 2-5fps，较慢）：**
+```bash
+pip install torch torchvision
+```
+
+**验证 GPU 是否可用：**
+```bash
+python -c "import torch; print('CUDA:', torch.cuda.is_available())"
+```
+> 输出 `CUDA: True` 表示 GPU 可用
+
+### 4. 安装其他依赖
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. 安装 L2CS-Net
+### 5. 安装 L2CS-Net
 
 ```bash
 pip install git+https://github.com/Ahmednull/L2CS-Net.git
 ```
 
-### 5. 下载模型权重
+### 6. 下载模型权重
 
 从 [Google Drive](https://drive.google.com/file/d/1fR8pZPxTrMXQaLGwolJ_vZZMMW9wWdCp/view) 下载 `L2CSNet_gaze360.pkl`，放到 `models/` 目录。
 
-### 6. 安装浏览器插件
+### 7. 安装浏览器插件
 
 1. 打开 Edge 浏览器，访问 `edge://extensions/`
 2. 开启"开发者模式"

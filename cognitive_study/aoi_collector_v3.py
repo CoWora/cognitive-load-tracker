@@ -1032,8 +1032,12 @@ def main():
             frame = cv2.flip(frame, 1)
             h, w = frame.shape[:2]
             
-            # L2CS
-            results = gaze_pipeline.step(frame)
+            # L2CS - 添加异常处理，防止检测不到人脸时崩溃
+            try:
+                results = gaze_pipeline.step(frame)
+            except ValueError as e:
+                # 没有检测到人脸时会抛出 "need at least one array to stack"
+                results = None
             
             # FPS
             frame_count += 1
@@ -1077,12 +1081,18 @@ def main():
             # 眨眼检测（每帧都检测）
             collector.process_blink(frame, time.time())
             
-            if results is not None and results.pitch is not None and len(results.pitch) > 0:
+            face_detected = results is not None and results.pitch is not None and len(results.pitch) > 0
+            
+            if face_detected:
                 # 绘制人脸框
                 if results.bboxes is not None and len(results.bboxes) > 0:
                     bbox = results.bboxes[0]
                     x1, y1, x2, y2 = map(int, bbox[:4])
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            else:
+                # 未检测到人脸警告
+                cv2.putText(frame, "NO FACE DETECTED", (w//2 - 120, h//2), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
             
             # ========== 绘制界面 ==========
             cv2.rectangle(frame, (0, 0), (w, 140), (30, 30, 40), -1)

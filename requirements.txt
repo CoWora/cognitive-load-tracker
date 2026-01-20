@@ -1,13 +1,24 @@
 # 认知负荷数据采集系统依赖
+# 
+# ⚠️ 安装顺序很重要！请按以下步骤操作：
+#
+# 步骤 1: 先安装 PyTorch (选择适合你的版本)
+# 
+#   有 NVIDIA 显卡 (推荐):
+#     pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+#
+#   无显卡 / 仅 CPU:
+#     pip install torch torchvision
+#
+# 步骤 2: 安装本文件的其他依赖
+#     pip install -r requirements.txt
+#
+# 步骤 3: 安装 L2CS-Net
+#     pip install git+https://github.com/Ahmednull/L2CS-Net.git
 
-# 核心依赖
+# 核心依赖 (PyTorch 需要先单独安装，见上方说明)
 numpy>=1.21.0
 opencv-python>=4.5.0
-torch>=1.9.0
-torchvision>=0.10.0
-
-# 视线追踪
-# L2CS-Net 需要单独安装: pip install git+https://github.com/Ahmednull/L2CS-Net.git
 
 # 数据处理
 pandas>=1.3.0

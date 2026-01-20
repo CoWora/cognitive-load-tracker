@@ -34,23 +34,24 @@ py -3.10 -m venv venv
 .\venv\Scripts\activate
 ```
 
-### 3. 安装 PyTorch
+### 3. 安装 PyTorch（⚠️ 必须先安装）
 
 **有 NVIDIA 显卡（推荐，帧率 10-15fps）：**
 ```bash
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
 ```
 
-**无显卡 / 仅 CPU（帧率 2-5fps，较慢）：**
+**无显卡 / 仅 CPU（帧率 2-5fps，会很慢）：**
 ```bash
 pip install torch torchvision
 ```
 
-**验证 GPU 是否可用：**
+**验证 GPU 是否启用：**
 ```bash
 python -c "import torch; print('CUDA:', torch.cuda.is_available())"
 ```
-> 输出 `CUDA: True` 表示 GPU 可用
+> ✅ 输出 `CUDA: True` 表示 GPU 已启用  
+> ⚠️ 输出 `CUDA: False` 表示只用 CPU，会很慢
 
 ### 4. 安装其他依赖
 

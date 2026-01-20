@@ -65,6 +65,8 @@ pip install git+https://github.com/Ahmednull/L2CS-Net.git
 py -3.10 cognitive_study/aoi_collector_v3.py
 ```
 
+> **注意**: 如果从 GitHub 下载，根目录就是项目根目录，直接运行上述命令即可。
+
 ### 快捷键
 
 | 按键 | 功能 |
@@ -172,4 +174,5 @@ MIT License
 
 - [L2CS-Net](https://github.com/Ahmednull/L2CS-Net) - 视线估计模型
 - [洛谷](https://www.luogu.com.cn/) - 算法题平台
+
 

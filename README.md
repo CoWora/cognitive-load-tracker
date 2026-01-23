@@ -1,29 +1,32 @@
-# 认知负荷数据采集系统 (Cognitive Load Data Collection System)
+# 认知负荷数据采集系统 (Cognitive Load Tracker)
 
 基于 **L2CS-Net** 深度学习视线追踪的认知负荷研究数据采集工具，专为算法题解题过程中的认知负荷分析设计。
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 功能特性
 
 - 🎯 **高精度视线追踪** - 使用 L2CS-Net 深度学习模型
-- 📊 **AOI 区域检测** - 自动识别洛谷题目页面的不同区域（标题、题目描述、输入输出、示例等）
+- 📊 **AOI 区域检测** - 通过浏览器插件自动识别洛谷题目页面的不同区域
 - 🔄 **注视检测** - 自动检测并记录注视事件
+- 👁️ **眨眼检测** - 基于 EAR 指标的眨眼事件记录
 - 📈 **AOI 转换记录** - 记录视线在不同区域间的转移
 - 🖥️ **智能窗口检测** - 自动区分浏览器和代码编辑器
-- 📁 **完整数据导出** - CSV 格式，便于后续分析
+- 📁 **完整数据导出** - CSV + JSON 格式，便于后续分析
 
 ## 系统要求
 
 - Windows 10/11
-- Python 3.10
+- Python 3.10+
 - NVIDIA GPU (推荐，支持 CUDA)
 - 摄像头
 
-## 安装
+## 快速开始
 
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/cognitive-load-tracker.git
+git clone https://github.com/CoWora/cognitive-load-tracker.git
 cd cognitive-load-tracker
 ```
 
@@ -41,7 +44,7 @@ py -3.10 -m venv venv
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
 ```
 
-**无显卡 / 仅 CPU（帧率 2-5fps，会很慢）：**
+**无显卡 / 仅 CPU（帧率 2-5fps）：**
 ```bash
 pip install torch torchvision
 ```
@@ -51,7 +54,7 @@ pip install torch torchvision
 python -c "import torch; print('CUDA:', torch.cuda.is_available())"
 ```
 > ✅ 输出 `CUDA: True` 表示 GPU 已启用  
-> ⚠️ 输出 `CUDA: False` 表示只用 CPU，会很慢
+> ⚠️ 输出 `CUDA: False` 表示只用 CPU
 
 ### 4. 安装其他依赖
 
@@ -75,7 +78,7 @@ pip install git+https://github.com/Ahmednull/L2CS-Net.git
 
 ### 7. 安装浏览器插件
 
-1. 打开 Edge 浏览器，访问 `edge://extensions/`
+1. 打开 Edge/Chrome 浏览器，访问扩展管理页面
 2. 开启"开发者模式"
 3. 点击"加载解压缩的扩展"
 4. 选择 `cognitive_study/luogu_extension` 文件夹
@@ -85,10 +88,8 @@ pip install git+https://github.com/Ahmednull/L2CS-Net.git
 ### 启动数据采集
 
 ```bash
-py -3.10 cognitive_study/aoi_collector_v3.py
+python cognitive_study/aoi_collector_v3_2.py
 ```
-
-> **注意**: 如果从 GitHub 下载，根目录就是项目根目录，直接运行上述命令即可。
 
 ### 快捷键
 
@@ -102,6 +103,7 @@ py -3.10 cognitive_study/aoi_collector_v3.py
 | `T` | 结束任务 - TLE (超时) |
 | `G` | 结束任务 - 放弃 |
 | `+/-` | 调整视线平滑度 |
+| `B` | 手动触发眨眼（测试用）|
 | `P` | 暂停/继续记录 |
 | `Q` | 退出并保存数据 |
 
@@ -111,19 +113,20 @@ py -3.10 cognitive_study/aoi_collector_v3.py
 2. 打开洛谷题目页面（确保浏览器插件已连接）
 3. 按 `N` 开始任务，设置难度
 4. 开始做题，系统自动记录视线数据
-5. 完成后按 `A/W/T/G` 结束任务
+5. 完成后按 `A/W/T/G` 结束任务并评分
 6. 按 `Q` 退出，数据自动保存
 
 ## 数据输出
 
-数据保存在 `cognitive_data/YYYYMMDD_HHMMSS/` 目录下：
+数据保存在 `data/cognitive_study/YYYYMMDD_HHMMSS/` 目录下：
 
 | 文件 | 内容 |
 |------|------|
 | `gaze_data.csv` | 原始视线数据（时间戳、坐标、AOI 等）|
 | `fixations.csv` | 注视事件（位置、时长、AOI）|
 | `aoi_transitions.csv` | AOI 转换记录 |
-| `tasks.csv` | 任务信息（题号、难度、结果）|
+| `blinks.csv` | 眨眼事件（时间戳、EAR）|
+| `tasks.csv` | 任务信息（题号、难度、结果、主观评分）|
 | `events.csv` | 事件日志 |
 | `session_meta.json` | 会话元数据 |
 
@@ -136,6 +139,7 @@ py -3.10 cognitive_study/aoi_collector_v3.py
 - `aoi_region`: AOI 区域 ID
 - `aoi_name`: AOI 区域名称
 - `is_fixation`: 是否为注视状态
+- `task_id`: 任务 ID
 
 **AOI 区域:**
 - `A_TITLE`: 题目标题
@@ -148,25 +152,36 @@ py -3.10 cognitive_study/aoi_collector_v3.py
 ## 项目结构
 
 ```
-cognitive_study/
-├── aoi_collector_v3.py      # 主程序
-├── luogu_extension/         # 浏览器插件
-│   ├── manifest.json
-│   ├── content.js
-│   └── icon.png
-└── README.md
-
-models/
-└── L2CSNet_gaze360.pkl      # L2CS-Net 模型权重
-
-cognitive_data/              # 数据输出目录
-└── YYYYMMDD_HHMMSS/
-    ├── gaze_data.csv
-    ├── fixations.csv
-    ├── aoi_transitions.csv
-    ├── tasks.csv
-    ├── events.csv
-    └── session_meta.json
+cognitive-load-tracker/
+├── cognitive_study/
+│   ├── aoi_collector_v3_2.py     # 主程序（推荐使用）
+│   ├── aoi_collector_v3.py       # 主程序 V3
+│   ├── aoi_collector_v2.py       # 主程序 V2
+│   ├── aoi_collector.py          # 主程序 V1
+│   ├── aoi_analyzer.py           # 数据分析工具
+│   ├── aoi_config_tool.py        # AOI 配置工具
+│   └── luogu_extension/          # 浏览器插件
+│       ├── manifest.json
+│       ├── content.js
+│       └── icon.png
+│
+├── models/
+│   └── L2CSNet_gaze360.pkl       # L2CS-Net 模型权重
+│
+├── data/                          # 数据输出目录
+│   └── cognitive_study/
+│       └── YYYYMMDD_HHMMSS/
+│           ├── gaze_data.csv
+│           ├── fixations.csv
+│           ├── aoi_transitions.csv
+│           ├── blinks.csv
+│           ├── tasks.csv
+│           ├── events.csv
+│           └── session_meta.json
+│
+├── README.md
+├── requirements.txt
+└── .gitignore
 ```
 
 ## 技术栈
@@ -179,23 +194,18 @@ cognitive_data/              # 数据输出目录
 ## 已知问题
 
 - 帧率约 8-15 fps（受 GPU 性能影响）
-- 眨眼检测暂时禁用（MediaPipe 兼容性问题）
 - 视线精度约 3-5° 角度误差
+- 眨眼检测依赖 MediaPipe，可能存在兼容性问题
 
-## 后续计划
+## 相关项目
 
-- [ ] 修复眨眼检测
-- [ ] 添加瞳孔直径检测
-- [ ] 支持更多题目平台
-- [ ] 实时认知负荷预测模型
+- [L2CS-Net](https://github.com/Ahmednull/L2CS-Net) - 视线估计模型
+- [洛谷](https://www.luogu.com.cn/) - 算法题平台
 
 ## 许可证
 
 MIT License
 
-## 致谢
+---
 
-- [L2CS-Net](https://github.com/Ahmednull/L2CS-Net) - 视线估计模型
-- [洛谷](https://www.luogu.com.cn/) - 算法题平台
-
-
+Copyright (c) 2024 CoWora

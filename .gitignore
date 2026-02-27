@@ -16,6 +16,8 @@ models/*.pt
 
 # 数据文件 (隐私保护)
 cognitive_data/
+cognitive_data_synth/
+data/
 
 # IDE
 .idea/
